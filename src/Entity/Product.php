@@ -21,8 +21,8 @@ class Product implements \App\Service\Catalog\Product
 
     public function __construct(string $id, string $name, int $price)
     {
-        $this->id = Uuid::fromString($id);
-        $this->name = $name;
+        $this->id          = Uuid::fromString($id);
+        $this->name        = $name;
         $this->priceAmount = $price;
     }
 

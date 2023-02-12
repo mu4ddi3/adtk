@@ -19,14 +19,13 @@ class Cart implements \App\Service\Cart\Cart
     #[ORM\Column(type: 'uuid', nullable: false)]
     private UuidInterface $id;
 
-    #[ORM\ManyToMany(targetEntity: 'Product')]
-    #[ORM\JoinTable(name: 'cart_products')]
-    private Collection $products;
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: 'CartProduct', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $cartProducts;
 
     public function __construct(string $id)
     {
-        $this->id = Uuid::fromString($id);
-        $this->products = new ArrayCollection();
+        $this->id           = Uuid::fromString($id);
+        $this->cartProducts = new ArrayCollection();
     }
 
     public function getId(): string
@@ -36,37 +35,34 @@ class Cart implements \App\Service\Cart\Cart
 
     public function getTotalPrice(): int
     {
-        return array_reduce(
-            $this->products->toArray(),
-            static fn(int $total, Product $product): int => $total + $product->getPrice(),
-            0
-        );
+        return array_reduce($this->cartProducts->toArray(), static fn(int $total, CartProduct $cartProduct): int => $total + $cartProduct->getProductPrice(), 0);
     }
 
     #[Pure]
     public function isFull(): bool
     {
-        return $this->products->count() >= self::CAPACITY;
+        return $this->cartProducts->count() >= self::CAPACITY;
     }
 
     public function getProducts(): iterable
     {
-        return $this->products->getIterator();
+//        return $this->cartProducts->getIterator();
+        return $this->cartProducts;
     }
 
     #[Pure]
-    public function hasProduct(\App\Entity\Product $product): bool
+    public function hasProduct(CartProduct $cartProduct): bool
     {
-        return $this->products->contains($product);
+        return $this->cartProducts->contains($cartProduct);
     }
 
-    public function addProduct(\App\Entity\Product $product): void
+    public function addProduct(CartProduct $cartProduct): void
     {
-        $this->products->add($product);
+        $this->cartProducts->add($cartProduct);
     }
 
-    public function removeProduct(\App\Entity\Product $product): void
+    public function removeProduct(CartProduct $cartProduct): void
     {
-        $this->products->removeElement($product);
+        $this->cartProducts->removeElement($cartProduct);
     }
 }
