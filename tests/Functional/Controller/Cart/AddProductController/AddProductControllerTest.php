@@ -13,6 +13,27 @@ class AddProductControllerTest extends WebTestCase
         $this->loadFixtures(new AddProductControllerFixture());
     }
 
+    public function test_adds_same_product_to_cart_until_cart_capacity_is_reached(): void
+    {
+        $this->client->request('PUT', '/cart/5bd88887-7017-4c08-83de-8b5d9abde58c/fbcb8c51-5dcc-4fd4-a4cd-ceb9b400bff7');
+        self::assertResponseStatusCodeSame(202);
+
+        $this->client->request('PUT', '/cart/5bd88887-7017-4c08-83de-8b5d9abde58c/fbcb8c51-5dcc-4fd4-a4cd-ceb9b400bff7');
+        self::assertResponseStatusCodeSame(202);
+
+        $this->client->request('PUT', '/cart/5bd88887-7017-4c08-83de-8b5d9abde58c/fbcb8c51-5dcc-4fd4-a4cd-ceb9b400bff7');
+        self::assertResponseStatusCodeSame(202);
+
+        $this->client->request('PUT', '/cart/5bd88887-7017-4c08-83de-8b5d9abde58c/fbcb8c51-5dcc-4fd4-a4cd-ceb9b400bff7');
+        self::assertResponseStatusCodeSame(422);
+
+        $this->client->request('GET', '/cart/5bd88887-7017-4c08-83de-8b5d9abde58c');
+        self::assertResponseStatusCodeSame(200);
+
+        $response = $this->getJsonResponse();
+        self::assertCount(3, $response['products']);
+    }
+
     public function test_adds_product_to_cart(): void
     {
         $this->client->request('PUT', '/cart/5bd88887-7017-4c08-83de-8b5d9abde58c/fbcb8c51-5dcc-4fd4-a4cd-ceb9b400bff7');
