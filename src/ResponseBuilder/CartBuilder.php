@@ -10,14 +10,14 @@ class CartBuilder
     {
         $data = [
             'total_price' => $cart->getTotalPrice(),
-            'products' => []
+            'products'    => [],
         ];
 
         foreach ($cart->getProducts() as $cartProduct) {
             $data['products'][] = [
-                'id' => $cartProduct->getProductId(),
-                'name' => $cartProduct->getProductName(),
-                'price' => $cartProduct->getProductPrice()
+                'id'    => $cartProduct->getProductId(),
+                'name'  => $cartProduct->getProductName(),
+                'price' => $cartProduct->getProductPrice(),
             ];
         }
 

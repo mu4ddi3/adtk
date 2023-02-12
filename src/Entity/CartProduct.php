@@ -25,9 +25,9 @@ class CartProduct implements \App\Service\Cart\CartProduct
 
     public function __construct(Cart $cart, Product $product, ?string $id = null)
     {
-        $this->cart = $cart;
+        $this->cart    = $cart;
         $this->product = $product;
-        $this->id = $id ? Uuid::fromString($id) : Uuid::uuid4();
+        $this->id      = $id ? Uuid::fromString($id) : Uuid::uuid4();
     }
 
     public function getId(): string

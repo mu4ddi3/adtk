@@ -11,14 +11,14 @@ use Ramsey\Uuid\Uuid;
 
 class CartRepository implements CartService
 {
-    public function __construct(private EntityManagerInterface $entityManager) {}
+    public function __construct(private EntityManagerInterface $entityManager) { }
 
     public function addProduct(string $cartId, string $productId): void
     {
-        $cart = $this->entityManager->find(\App\Entity\Cart::class, $cartId);
+        $cart    = $this->entityManager->find(\App\Entity\Cart::class, $cartId);
         $product = $this->entityManager->find(Product::class, $productId);
 
-        if ($cart && $product) {
+        if ($cart && $product && !$cart->isFull()) {
             $cardProduct = new CartProduct($cart, $product);
 
             $cart->addProduct($cardProduct);
@@ -29,12 +29,12 @@ class CartRepository implements CartService
 
     public function removeProduct(string $cartId, string $productId): void
     {
-        $cart = $this->entityManager->find(\App\Entity\Cart::class, $cartId);
-        $product = $this->entityManager->find(Product::class, $productId);
+        $cart        = $this->entityManager->find(\App\Entity\Cart::class, $cartId);
+        $product     = $this->entityManager->find(Product::class, $productId);
         $cartProduct = $this->entityManager->getRepository(CartProduct::class)
             ->findOneBy([
-                'cart' => $cartId,
-                'product' => $productId
+                'cart'    => $cartId,
+                'product' => $productId,
             ]);
 
         if ($cart && $product && $cartProduct) {
