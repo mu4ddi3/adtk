@@ -9,6 +9,13 @@ name=Example product 0&price=1200
 
 DELETE https://localhost/products/ec0c615d-0571-4e4b-9582-59a7edaf8117
 
+### Update product in catalog
+
+PUT https://localhost/products/f3955fbb-27f9-4fb2-8b52-f4ab9db22e10
+Content-Type: application/x-www-form-urlencoded
+
+name=Example product 11&price=2112
+
 ### List products
 
 GET https://localhost/products
