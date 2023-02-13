@@ -36,7 +36,7 @@ final class Version20230212222829 extends AbstractMigration
         $this->addSql('ALTER TABLE cart_products DROP FOREIGN KEY FK_2D2515311AD5CDBF');
         $this->addSql('ALTER TABLE cart_products DROP FOREIGN KEY FK_2D2515314584665A');
         $this->addSql('ALTER TABLE cart_products DROP PRIMARY KEY');
-        $this->addSql('ALTER TABLE cart_products DROP id, CHANGE cart_id cart_id CHAR(36) NOT NULL COLLATE `utf8mb4_unicode_ci` COMMENT \'(DC2Type:uuid)\', CHANGE product_id product_id CHAR(36) NOT NULL COLLATE `utf8mb4_unicode_ci` COMMENT \'(DC2Type:uuid)\'');
+        $this->addSql('ALTER TABLE cart_products DROP id');
         $this->addSql('ALTER TABLE cart_products ADD CONSTRAINT FK_2D2515311AD5CDBF FOREIGN KEY (cart_id) REFERENCES cart (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cart_products ADD CONSTRAINT FK_2D2515314584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cart_products ADD PRIMARY KEY (cart_id, product_id)');
